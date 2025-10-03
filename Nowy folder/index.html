@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HeartMC Administracja</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Roboto',sans-serif;}
+body{background:#f6f7fb;color:#333;line-height:1.6;}
+header{background:#d500f9;color:#fff;padding:40px 20px;text-align:center;position:relative;}
+header h1{font-size:2.5rem;margin-bottom:10px;}
+nav{background:#fff;padding:15px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,0.1);}
+nav a{margin:0 15px;text-decoration:none;color:#333;font-weight:600;transition:.3s;cursor:pointer;}
+nav a:hover{color:#d500f9;}
+section{padding:50px 20px;max-width:1000px;margin:auto;}
+h2{color:#6a1b9a;margin-bottom:20px;}
+ul li{margin-bottom:8px;}
+.rules li{background:#ffccff;padding:15px;margin-bottom:10px;border-left:5px solid #cc00ff;box-shadow:0 2px 5px rgba(0,0,0,0.05);}
+.quiz{background:#fff;padding:25px;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,0.15);}
+.quiz button{background:#6a1b9a;color:#fff;border:none;padding:12px 25px;margin-top:15px;cursor:pointer;border-radius:8px;font-weight:600;transition:.3s;}
+.quiz button:hover{background:#4a148c;}
+.question{margin-bottom:25px;}
+.question p{font-weight:600;}
+.question label{display:block;margin-bottom:5px;}
+footer{background:#333;color:#fff;text-align:center;padding:25px 0;margin-top:40px;}
+textarea{width:100%;padding:10px;border:1px solid #ccc;border-radius:6px;resize:vertical;min-height:80px;}
+#startScreen{position:fixed;top:0;left:0;width:100%;height:100%;background:#f6f7fb;display:flex;justify-content:center;align-items:center;z-index:1000;}
+#startBox{background:#fff;border:4px solid #aa00ff;border-radius:12px;padding:40px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.1);}
+#startBox h2{color:#000;margin-bottom:20px;}
+#startBox input{padding:10px;border:1px solid #ccc;border-radius:6px;width:250px;text-align:center;margin-bottom:15px;}
+#startBox button{padding:10px 20px;border:none;border-radius:6px;background:#4a148c;color:#fff;font-weight:bold;cursor:pointer;}
+#startBox button:hover{background:#4a148c;}
+#countdown{display:none;margin:20px 0;font-weight:bold;color:#d500f9;}
+#chatBox{display:none;background:#fff;padding:20px;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,0.15);max-width:500px;margin:20px auto;}
+#chatMessages{height:200px;overflow-y:auto;border:1px solid #ccc;padding:10px;margin-bottom:10px;border-radius:6px;background:#f6f7fb;}
+#chatInput{width:calc(100% - 90px);padding:8px;}
+#chatSend{padding:8px 12px;background:#6a1b9a;color:#fff;border:none;border-radius:6px;cursor:pointer;}
+#chatSend:hover{background:#4a148c;}
+</style>
+</head>
+<body>
+
+<!-- Logowanie -->
+<div id="startScreen">
+  <div id="startBox">
+    <h2>🌵Podaj swoją nazwę użytkownika🌵</h2>
+    <input type="text" id="usernameInput" placeholder="Twoja nazwa..." />
+    <br>
+    <button id="enterBtn">Idź dalej</button>
+  </div>
+</div>
+
+<header style="display:none;" id="mainHeader">
+  <h1>💘HEARTMC.PL ADMINISTRACJA💘</h1>
+</header>
+
+<nav style="display:none;" id="mainNav">
+  <a href="#intro">Wstępne wprowadzenie</a>
+  <a href="#rules">Zasady Ticketów</a>
+  <a href="#penalties">Zasady Kary</a>
+  <a href="#unbans">Zasady Unbany</a>
+  <a href="#general">Zasady Ogólne</a>
+  <a href="#channels">Kanały Pomocnicze</a>
+  <a href="#" id="examplesBtn">Przykłady Ticketów</a>
+  <a href="#quiz">Test Wiedzy</a>
+</nav>
+
+<section id="intro" style="display:none;">
+  <h2>👻Wstępne wprowadzenie👻</h2>
+  <ul>
+    <li>Tickety muszą być robione na 100% waszych możliwości. Przykłady ticketów znajdziecie na Discordzie na kanale <em>procedury</em>.</li>
+    <li>Pamiętaj: <strong>Gracz zawsze ma być zadowolony</strong></li>
+    <li>Zrzut ekranu ticketa</li>
+    <li>Zrzut ekranu z mutów/przerw</li>
+    <li>Zgłaszanie graczy na kanał <em>ludzie do bana</em></li>
+    <li>Pomoc na kanale głosowym <em>Pomagam</em></li>
+  </ul>
+</section>
+
+<section id="rules" style="display:none;">
+  <h2>📆Zasady Ticketów📆</h2>
+  <ul class="rules">
+    <li>Masz 5 minut na odpowiedź</li>
+    <li>Pisz luźno – nie jak bot / nie kopiuj regulaminu.</li>
+    <li>Nie rozwiązuj konfliktów prywatnych w ticketach.</li>
+    <li>Jeśli gracz jest zdenerwowany postaraj się go uspokoić </li>
+    <li>Unikaj krótkich/chamskich odpowiedzi.</li>
+    <li>Jeśli nie wpiesz spytaj - nie wprowadzaj gracza w błąd</li>
+    <li>Jeśli wiesz, że popełniłeś błąd, przyznaj się do niego – nie rób z siebie debila</li>
+    <li>Nie zostawiaj ticketa bez zakończenia </li>
+    <li>Pomagaj graczowi na 100% swoich możliwości - gracz zawsze ma być zadowolony</li>
+    <li>Bądz dla gracza miły </li>
+    <li>Masz ogarniać - Gracz ma czuć że rozmawia z kimś ogarniętym</li>
+    <li>Jeśli chcesz komuś pomóc w tickecie przeczytaj go dowiedz się w czym polega problem.</li>
+  </ul>
+</section>
+
+<section id="penalties" style="display:none;">
+  <h2>⚖️Zasady Kary⚖️</h2>
+  <ul class="rules">
+    <li>Przed każdym mutem ostrzegacie gracza wiadomością: "Hejka nie używaj caps locka".</li>
+    <li>Przed każdym banem upewnij się, że gracz nie używa moda do zmiany nazwy</li>
+    <li>SOON</li>
+    <li>Przed przerwą na Discordzie dajecie 2 ostrzerzenia – nie chamsko napisz np :(nazwa Gracza) nie używaj caps looka😃</li>
+    <li>Stosuj się do taryfikatora kar na Discord HEARTMC.PL</li>
+  </ul>
+</section>
+
+<section id="unbans" style="display:none;">
+  <h2>🛠️Zasady Unbany🛠️</h2>
+  <ul class="rules">
+    <li>Gracz może otrzymać unbana za fanarta, lecz działa to w przypdku jeśli ban nie jest za - cheaty/kopiowanie/poważniejsze rzeczy.</li>
+    <li>Gracz nie może odwołać się od bana jeśli minęły od niego ponad 4h.</li>
+    <li>Permamentne bany od Właścicieli na 99% są słuszne i nie podlegają do odwołania</li>
+  </ul>
+</section>
+
+<section id="general" style="display:none;">
+  <h2>🌐Zasady Ogólne🌐</h2>
+  <ul class="rules">
+    <li>Nawet jeśli masz rangę chatmod nie zwalnia cię ona z regulaminu serwera HEARTMC.Pl</li>
+    <li></li>
+    <li></li>
+  </ul>
+</section>
+
+<section id="channels" style="display:none;">
+  <h2>📌Kanały Pomocnicze na Discord📌</h2>
+  <ul class="rules">
+    <li>Kanał przykłady ticketów: Procedury</li>
+    <li>Kanał z taryfikatorem: Kary</li>
+    <li>Kanał z mentorami: Mentorzy</li>
+    <li>Kanał na którym możesz się dopytać: admin ogólny</li>
+  </ul>
+</section>
+
+<section id="chatBox">
+  <h2>Przykłady Ticketów</h2>
+  <div d="chatMessages"></div>
+  <input type="text" id="chatInput" placeholder="Wpisz wiadomość..." />
+  <button id="chatSend">Wyślij</button>
+</section>
+
+<section id="quiz" style="display:none;">
+  <h2>📋Test umiejętności administracji HEARTMC.PL📋</h2>
+  <div class="quiz">
+    <div id="countdown"></div>
+    <form id="quizForm">
+
+<!-- 20 pytań w pełnej wersji -->
+<div class="question"><p>1. Masz 2 minuty na reakcję. Prawda czy fałsz?</p>
+<label><input type="radio" name="q1" value="1"> Prawda</label>
+<label><input type="radio" name="q1" value="0"> Fałsz</label></div>
+
+<div class="question"><p>2. Czy można kopiować całe fragmenty regulaminu do ticketa?</p>
+<label><input type="radio" name="q2" value="0"> Tak</label>
+<label><input type="radio" name="q2" value="1"> Nie</label></div>
+
+<div class="question"><p>3. Każdy ticket musi mieć zamknięcie z podziękowaniem. Prawda?</p>
+<label><input type="radio" name="q3" value="1"> Tak</label>
+<label><input type="radio" name="q3" value="0"> Nie</label></div>
+
+<div class="question"><p>4. Co robisz, jeśli nie wiesz odpowiedzi?</p>
+<label><input type="radio" name="q4" value="1"> Pytam kogoś</label>
+<label><input type="radio" name="q4" value="0"> Zmyślam odpowiedź</label></div>
+
+<div class="question"><p>5. Jak powinna brzmieć odpowiedź do gracza?</p>
+<label><input type="radio" name="q5" value="1"> Jak człowiek, z empatią</label>
+<label><input type="radio" name="q5" value="0"> Krótko i sucho</label></div>
+
+<div class="question"><p>6. Co robisz, jeśli gracz zgłasza błąd?</p>
+<label><input type="radio" name="q6" value="1"> Dziękuję i nadaję rangę/pakiet</label>
+<label><input type="radio" name="q6" value="0"> Ignoruję</label></div>
+
+<div class="question"><p>7. Czy ticket można zostawić bez odpowiedzi?</p>
+<label><input type="radio" name="q7" value="0"> Tak</label>
+<label><input type="radio" name="q7" value="1"> Nie</label></div>
+
+<div class="question"><p>8. Jak zamykasz ticketa?</p>
+<label><input type="radio" name="q8" value="1"> Podziękowanie i info co dalej</label>
+<label><input type="radio" name="q8" value="0"> Po prostu "zamknięte"</label></div>
+
+<div class="question"><p>9. Jakie złe odpowiedzi powinieneś unikać? (checkbox)</p>
+<label><input type="checkbox" name="q9" value="1"> "czekaj"</label>
+<label><input type="checkbox" name="q9" value="1"> "to nie nasz problem"</label>
+<label><input type="checkbox" name="q9" value="0"> "rozumiem frustrację – działamy nad tym"</label></div>
+
+<div class="question"><p>10. Jeśli gracz jest zdenerwowany, bo zginął od cheatera – co robisz?</p>
+<label><input type="radio" name="q10" value="1"> Uspokajam go i oferuję rekompensatę</label>
+<label><input type="radio" name="q10" value="0"> Mówię, że to nie mój problem</label></div>
+
+<div class="question"><p>11. System 5 gwiazdek – jakie elementy sprawdzasz? (checkbox)</p>
+<label><input type="checkbox" name="q11" value="1"> Odpowiedź do 2 minut</label>
+<label><input type="checkbox" name="q11" value="1"> Brzmiałeś jak człowiek</label>
+<label><input type="checkbox" name="q11" value="1"> Gracz wiedział, co się dzieje</label>
+<label><input type="checkbox" name="q11" value="1"> Gracz czuł się wysłuchany</label>
+<label><input type="checkbox" name="q11" value="1"> Rozwiązałeś problem i dodałeś coś ekstra</label></div>
+
+<div class="question"><p>12. Kiedy musisz zgłosić wsparcie lub błąd do procedury bonusowej?</p>
+<label><input type="radio" name="q12" value="1"> Gdy gracz miał nieprzyjemność lub zgłosił błąd</label>
+<label><input type="radio" name="q12" value="0"> Nigdy</label></div>
+
+<div class="question"><p>13. Jaki jest obowiązkowy element zamknięcia ticketa?</p>
+<label><input type="radio" name="q13" value="1"> Podziękowanie i informacja o dalszych krokach</label>
+<label><input type="radio" name="q13" value="0"> Samo słowo "zamknięte"</label></div>
+
+<div class="question"><p>14. Czy możesz samodzielnie wymyślić procedury?</p>
+<label><input type="radio" name="q14" value="0"> Tak</label>
+<label><input type="radio" name="q14" value="1"> Nie</label></div>
+
+<div class="question"><p>15. Co robisz, jeśli gracz zgłosił crasha lub bug?</p>
+<label><input type="radio" name="q15" value="1"> Daję mu rekompensatę i zamykam ticket z podziękowaniem</label>
+<label><input type="radio" name="q15" value="0"> Olewam zgłoszenie</label></div>
+
+<div class="question"><p>16. Czy możesz sobie nadać punkt za ticketa z samym pytaniem „czy sprawa zakończona?”</p>
+<label><input type="radio" name="q16" value="0"> Tak</label>
+<label><input type="radio" name="q16" value="1"> Nie</label></div>
+
+<div class="question"><p>17. Co odpowiesz graczowi na pomocy, gdy chce backupa a nie ma klipa? (Min. 12 wyrazów)</p>
+<textarea name="q17" placeholder="Twoja odpowiedź..."></textarea></div>
+
+<div class="question"><p>18. Na ile jest przerwa za obrazę graczy?</p>
+<label><input type="radio" name="q18" value="1"> 1h</label>
+<label><input type="radio" name="q18" value="0"> 7d</label>
+<label><input type="radio" name="q18" value="0"> 10min</label></div>
+
+<div class="question"><p>19. Ile punktów dziennie powinien robić administrator?</p>
+<label><input type="radio" name="q19" value="1"> 10</label>
+<label><input type="radio" name="q19" value="1"> 20</label>
+<label><input type="radio" name="q19" value="1"> Nie ważna jest ilość tylko jakość</label></div>
+
+<div class="question"><p>20. Jakimi cechami powinien się wyróżniać administrator? (min. 4 cechy)</p>
+<textarea name="q20" placeholder="Wpisz cechy: Bezstronność, Pomocność, Zaangażowanie, Miły, Pomocny..."></textarea></div>
+
+      <button type="button" onclick="checkQuiz()">Zakończ test</button>
+      <button type="button" onclick="showResults()">Wyniki</button>
+      <button type="button" onclick="showResults()">Admin Panel</button>
+    </form>
+    <p id="result" style="margin-top:20px;font-weight:700;"></p>
+  </div>
+</section>
+
+<footer style="display:none;" id="mainFooter">
+  &copy; 2025 HeartMC Administracja
+</footer>
+
+<script>
+let currentUser = "";
+const maxAttempts = 3;
+const cooldownHours = 10;
+
+document.getElementById("enterBtn").addEventListener("click", function(){
+  const username = document.getElementById("usernameInput").value.trim();
+  if(!username){ alert("Podaj nazwę!"); return; }
+  currentUser = username;
+  document.getElementById("startScreen").style.display = "none";
+  ["mainHeader","mainNav","intro","rules","penalties","unbans","general","channels","quiz","mainFooter"].forEach(id=>{
+    document.getElementById(id).style.display="block";
+  });
+  loadUserData();
+});
+
+function loadUserData(){
+  let data = JSON.parse(localStorage.getItem(currentUser)) || {attempts:0,lastTime:0,results:[]};
+  const now = Date.now();
+  if(data.attempts >= maxAttempts){
+    const elapsedHours = (now - data.lastTime)/1000/3600;
+    if(elapsedHours < cooldownHours){
+      document.getElementById("quizForm").style.display="none";
+      startCountdown(cooldownHours - elapsedHours);
+      return;
+    } else {
+      data.attempts = 0; 
+    }
+  }
+  localStorage.setItem(currentUser, JSON.stringify(data));
+}
+
+function startCountdown(hours){
+  const cd = document.getElementById("countdown");
+  cd.style.display="block";
+  let seconds = Math.floor(hours*3600);
+  const interval = setInterval(()=>{
+    if(seconds<=0){
+      clearInterval(interval);
+      cd.style.display="none";
+      document.getElementById("quizForm").style.display="block";
+      let data = JSON.parse(localStorage.getItem(currentUser));
+      data.attempts = 0;
+      localStorage.setItem(currentUser, JSON.stringify(data));
+      return;
+    }
+    let h=Math.floor(seconds/3600);
+    let m=Math.floor((seconds%3600)/60);
+    let s=seconds%60;
+    cd.textContent=`Limit prób wyczerpany 3/3. Test dostępny za ${h}h ${m}m ${s}s`;
+    seconds--;
+  },1000);
+}
+
+function checkQuiz(){
+  let data = JSON.parse(localStorage.getItem(currentUser)) || {attempts:0,lastTime:0,results:[]};
+  if(data.attempts >= maxAttempts){ alert("Osiągnięto maksymalną liczbę testów dziennie (3)."); return;}
+  
+  const form = new FormData(document.getElementById("quizForm"));
+  let score=0;
+  const correct = {q1:"1",q2:"1",q3:"1",q4:"1",q5:"1",q6:"1",q7:"1",q8:"1",q10:"1",q12:"1",q13:"1",q14:"1",q15:"1",q16:"1",q18:"1"};
+
+  // Sprawdzenie odpowiedzi radio i checkbox
+  for(let [k,v] of form.entries()){
+    if(correct[k] && v===correct[k]) score++;
+  }
+  document.querySelectorAll('input[name="q9"]:checked').forEach(opt=>{if(opt.value==="1")score++;});
+  document.querySelectorAll('input[name="q11"]:checked').forEach(opt=>{if(opt.value==="1")score++;});
+
+  const q17=form.get("q17")||""; if(q17.trim().split(/\s+/).length>=12) score++;
+  const q19=form.get("q19")||""; if(["10","20","Nie ważna jest ilość tylko jakość"].includes(q19)) score++;
+  const q20=form.get("q20")||""; 
+  const validTraits=["Bezstronność","Pomocność","Zaangażowanie","Miły","Pomocny"];
+  if(validTraits.some(trait=>q20.includes(trait))) score++;
+
+  data.attempts++;
+  data.lastTime=Date.now();
+  data.results.push({score:score});
+  localStorage.setItem(currentUser, JSON.stringify(data));
+  document.getElementById("result").innerText=`${currentUser}, Twój wynik testu📋: ${score} / 23`;
+  document.getElementById("quizForm").reset();
+  if(data.attempts>=maxAttempts){ 
+    document.getElementById("quizForm").style.display="none";
+    startCountdown(cooldownHours);
+  }
+}
+
+function showResults(){
+  const data = JSON.parse(localStorage.getItem(currentUser)) || {results:[]};
+  let html="<h3>Wyniki testów:</h3><ul>";
+  data.results.forEach((r,i)=>{ html+=`<li>${currentUser} - Próba ${i+1} - Punkty: ${r.score}</li>`; });
+  html+="</ul>";
+  const win=window.open("","Wyniki","width=600,height=400");
+  win.document.write(html);
+  win.document.close();
+}
+
+// --- Chat Przykłady Ticketów ---
+document.getElementById("examplesBtn").addEventListener("click",()=>{
+  const chat = document.getElementById("chatBox");
+  chat.style.display = chat.style.display === "block" ? "none" : "block";
+});
+
+document.getElementById("chatSend").addEventListener("click",()=>{
+  const input = document.getElementById("chatInput");
+  const msg = input.value.trim();
+  if(msg==="") return;
+  const messages = document.getElementById("chatMessages");
+  const div = document.createElement("div");
+  div.textContent = msg;
+  div.style.cursor = "pointer";
+  div.style.marginBottom = "5px";
+  div.addEventListener("click",()=>div.remove());
+  messages.appendChild(div);
+  messages.scrollTop = messages.scrollHeight;
+  input.value="";
+});
+</script>
+
+</body>
+</html>
